@@ -1,0 +1,6 @@
+node_modules/
+server/data/db.json
+client/dist/bundle.js
+client/dist/bundle.js.map
+client/dist/styles.css
+.env

@@ -1,0 +1,84 @@
+-- Liberty Reach database schema (MySQL 8+)
+CREATE DATABASE IF NOT EXISTS liberty_reach CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE liberty_reach;
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(190) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS articles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  excerpt TEXT,
+  content MEDIUMTEXT,
+  category VARCHAR(80) NOT NULL DEFAULT 'Freedom Ideas',
+  author VARCHAR(120) NOT NULL,
+  author_role VARCHAR(120) DEFAULT 'Liberty Reach Contributor',
+  image_url VARCHAR(500),
+  featured TINYINT(1) NOT NULL DEFAULT 0,
+  published TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_articles_category (category),
+  INDEX idx_articles_published (published)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS topics (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  month_label VARCHAR(40) NOT NULL,
+  year INT NOT NULL,
+  summary TEXT,
+  description TEXT,
+  activities JSON,
+  featured TINYINT(1) NOT NULL DEFAULT 0,
+  published TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS discussions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  type ENUM('question', 'opinion') NOT NULL DEFAULT 'question',
+  body TEXT,
+  author_name VARCHAR(120) NOT NULL,
+  author_email VARCHAR(190),
+  campus VARCHAR(160),
+  pinned TINYINT(1) NOT NULL DEFAULT 0,
+  locked TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_discussions_type (type)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS discussion_replies (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  discussion_id INT NOT NULL,
+  author_name VARCHAR(120) NOT NULL,
+  body TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  campus VARCHAR(160),
+  country VARCHAR(120),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  subject VARCHAR(255),
+  body TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
