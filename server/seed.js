@@ -36,10 +36,10 @@ async function main() {
     return;
   }
 
-  const hash = bcrypt.hashSync("admin123", 10);
+  const hash = bcrypt.hashSync("liberty@123!", 10);
   await conn.query("INSERT INTO admins (name, email, password_hash) VALUES (?,?,?)", [
     "Administrator",
-    "admin@libertyreach.org",
+    "nemmanuel@studentforliberty.org",
     hash,
   ]);
 
@@ -74,7 +74,7 @@ async function main() {
   });
 
   console.log("Seed complete.");
-  console.log("Admin login:  admin@libertyreach.org  /  admin123  (change this password!)");
+  console.log("Admin login:  nemmanuel@studentsforliberty.org  /  liberty@123!  (change this password!)");
   await conn.end();
 }
 

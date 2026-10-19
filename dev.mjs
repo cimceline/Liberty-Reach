@@ -9,7 +9,7 @@ const ctx = await esbuild.context({
   entryPoints: [path.join(root, "client/src/index.jsx")],
   bundle: true,
   outfile: path.join(root, "client/dist/bundle.js"),
-  loader: { ".js": "jsx", ".jsx": "jsx" },
+  loader: { ".js": "jsx", ".jsx": "jsx", ".png": "dataurl" },
   jsx: "automatic",
   sourcemap: true,
   target: ["es2019"],

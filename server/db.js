@@ -53,7 +53,7 @@ function loadJson() {
     json = clone(EMPTY);
   }
   for (const k of Object.keys(EMPTY)) if (!json[k]) json[k] = [];
-  if (json.articles.length === 0) seedJson(json);
+  if (json.admins.length === 0) seedJson(json);
   saveJson();
 }
 
@@ -66,8 +66,8 @@ function seedJson(db) {
   db.admins.push({
     id: 1,
     name: "Administrator",
-    email: "admin@libertyreach.org",
-    password_hash: bcrypt.hashSync("admin123", 10),
+    email: "nemmanuel@studentforliberty.org",
+    password_hash: bcrypt.hashSync("liberty@123!", 10),
     created_at: now(),
   });
   ARTICLES.forEach((a, i) =>

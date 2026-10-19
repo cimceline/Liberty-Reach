@@ -9,7 +9,7 @@ const options = {
   entryPoints: [path.join(root, "client/src/index.jsx")],
   bundle: true,
   outfile: path.join(root, "client/dist/bundle.js"),
-  loader: { ".js": "jsx", ".jsx": "jsx" },
+  loader: { ".js": "jsx", ".jsx": "jsx", ".png": "dataurl" },
   jsx: "automatic",
   minify,
   sourcemap: !minify,

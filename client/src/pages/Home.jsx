@@ -9,24 +9,19 @@ const heroImages = [
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
 ];
 
-const stats = [
-  { value: "24", label: "Campus Chapters" },
-  { value: "11", label: "Countries" },
-  { value: "120+", label: "Stories Published" },
-  { value: "3,500+", label: "Students Reached" },
-];
-
 export default function Home() {
   const [articles, setArticles] = useState(null);
   const [topics, setTopics] = useState(null);
+  const [storyCount, setStoryCount] = useState(0);
   const [error, setError] = useState(null);
 
   const load = () => {
     setError(null);
-    Promise.all([api.articles({ featured: "1" }), api.topics()])
-      .then(([a, t]) => {
+    Promise.all([api.articles({ featured: "1" }), api.topics(), api.articles()])
+      .then(([a, t, all]) => {
         setArticles(a.slice(0, 3));
         setTopics(t);
+        setStoryCount(all.length);
       })
       .catch((e) => setError(e.message));
   };
@@ -34,6 +29,13 @@ export default function Home() {
   useEffect(load, []);
 
   const featuredTopic = topics && topics.find((t) => t.featured) || topics && topics[0];
+
+  const stats = [
+    { value: "24", label: "Campus Chapters" },
+    { value: "11", label: "Countries" },
+    { value: String(storyCount), label: "Stories Published" },
+    { value: "0", label: "Students Reached" },
+  ];
 
   return (
     <>
