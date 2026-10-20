@@ -28,9 +28,7 @@ async function main() {
   multipleStatements: true,
 });
 
-  console.log("Connected to MySQL. Applying schema...");
-  const schema = fs.readFileSync(path.join(__dirname, "schema.sql"), "utf8");
-  await conn.query(schema);
+console.log("Connected to Aiven MySQL.");
 await conn.query("USE defaultdb");
 
   const [admins] = await conn.query("SELECT id FROM admins LIMIT 1");
