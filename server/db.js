@@ -142,15 +142,18 @@ async function init() {
   if (process.env.DB === "mysql") {
     try {
       const mysql = require("mysql2/promise");
-      pool = mysql.createPool({
-        host: process.env.MYSQL_HOST || "127.0.0.1",
-        port: Number(process.env.MYSQL_PORT || 3306),
-        user: process.env.MYSQL_USER || "root",
-        password: process.env.MYSQL_PASSWORD || "",
-        database: process.env.MYSQL_DB || "liberty_reach",
-        waitForConnections: true,
-        connectionLimit: 10,
-      });
+   pool = mysql.createPool({
+  host: process.env.MYSQL_HOST,
+  port: Number(process.env.MYSQL_PORT || 19655),
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB || "defaultdb",
+  ssl: {
+    rejectUnauthorized: true,
+  },
+  waitForConnections: true,
+  connectionLimit: 10,
+});
       await pool.query("SELECT 1");
       mode = "mysql";
       console.log("[db] connected to MySQL");
