@@ -61,19 +61,20 @@ await conn.query("USE defaultdb");
     );
   }
 
-  DISCUSSIONS.forEach(async (d) => {
-    const [res] = await conn.query(
-      `INSERT INTO discussions (title, type, body, author_name, author_email, campus, pinned, locked, created_at)
-       VALUES (?,?,?,?,?,?,?,?,?)`,
-      [d.title, d.type, d.body, d.author_name, d.author_email, d.campus, d.pinned, d.locked, new Date(d.created_at)]
+ for (const d of DISCUSSIONS) {
+  const [res] = await conn.query(
+    `INSERT INTO discussions (title, type, body, author_name, author_email, campus, pinned, locked, created_at)
+     VALUES (?,?,?,?,?,?,?,?,?)`,
+    [d.title, d.type, d.body, d.author_name, d.author_email, d.campus, d.pinned, d.locked, new Date(d.created_at)]
+  );
+
+  for (const r of d.replies || []) {
+    await conn.query(
+      "INSERT INTO discussion_replies (discussion_id, author_name, body, created_at) VALUES (?,?,?,?)",
+      [res.insertId, r.author_name, r.body, new Date(r.created_at)]
     );
-    for (const r of d.replies || []) {
-      await conn.query(
-        "INSERT INTO discussion_replies (discussion_id, author_name, body, created_at) VALUES (?,?,?,?)",
-        [res.insertId, r.author_name, r.body, new Date(r.created_at)]
-      );
-    }
-  });
+  }
+}
 
   console.log("Seed complete.");
   console.log("Admin login:  nemmanuel@studentsforliberty.org  /  liberty@123!  (change this password!)");
