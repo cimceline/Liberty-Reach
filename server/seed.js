@@ -16,13 +16,17 @@ async function main() {
   }
 
   const mysql = require("mysql2/promise");
-  const conn = await mysql.createConnection({
-    host: process.env.MYSQL_HOST || "127.0.0.1",
-    port: Number(process.env.MYSQL_PORT || 3306),
-    user: process.env.MYSQL_USER || "root",
-    password: process.env.MYSQL_PASSWORD || "",
-    multipleStatements: true,
-  });
+ const conn = await mysql.createConnection({
+  host: process.env.MYSQL_HOST,
+  port: Number(process.env.MYSQL_PORT || 19655),
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB || "defaultdb",
+  ssl: {
+    rejectUnauthorized: true,
+  },
+  multipleStatements: true,
+});
 
   console.log("Connected to MySQL. Applying schema...");
   const schema = fs.readFileSync(path.join(__dirname, "schema.sql"), "utf8");
