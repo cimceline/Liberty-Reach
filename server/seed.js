@@ -31,7 +31,7 @@ async function main() {
   console.log("Connected to MySQL. Applying schema...");
   const schema = fs.readFileSync(path.join(__dirname, "schema.sql"), "utf8");
   await conn.query(schema);
-  await conn.query("USE liberty_reach");
+await conn.query("USE defaultdb");
 
   const [admins] = await conn.query("SELECT id FROM admins LIMIT 1");
   if (admins.length) {
