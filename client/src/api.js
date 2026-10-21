@@ -1,4 +1,4 @@
-const BASE = "/api";
+const BASE = "https://liberty-reach.onrender.com/api";
 
 function getToken() {
   return localStorage.getItem("lr_token");
