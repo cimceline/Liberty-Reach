@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node build.mjs --minify && tailwindcss -i client/src/styles/index.css -o client/dist/styles.css --minify",
     "dev": "node dev.mjs",
+    "prestart": "npm run build",
     "start": "node server/index.js",
     "seed": "node server/seed.js"
   },
