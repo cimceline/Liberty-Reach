@@ -12,11 +12,12 @@ async function main() {
   const envFile = path.join(__dirname, "..", ".env");
 
   if (fs.existsSync(envFile)) {
-    for (const line of fs.readFileSync(envFile, "utf8").split(/\r?\n/)) {
-      const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i);
+    const content = fs.readFileSync(envFile, "utf8");
+    const re = /^[ \t]*([A-Z0-9_]+)[ \t]*=[ \t]*(?:"([\s\S]*?)"|([^\r\n]*))[ \t]*$/gm;
 
-      if (match && process.env[match[1]] === undefined) {
-        process.env[match[1]] = match[2].replace(/^["']|["']$/g, "");
+    for (const match of content.matchAll(re)) {
+      if (process.env[match[1]] === undefined) {
+        process.env[match[1]] = match[2] !== undefined ? match[2] : match[3].trim();
       }
     }
   }

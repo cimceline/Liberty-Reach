@@ -12,9 +12,12 @@ async function main() {
   // tiny .env loader (no extra dependency)
   const envFile = path.join(__dirname, "..", ".env");
   if (fs.existsSync(envFile)) {
-    for (const line of fs.readFileSync(envFile, "utf8").split(/\r?\n/)) {
-      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/i);
-      if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    const content = fs.readFileSync(envFile, "utf8");
+    const re = /^[ \t]*([A-Z0-9_]+)[ \t]*=[ \t]*(?:"([\s\S]*?)"|([^\r\n]*))[ \t]*$/gm;
+    for (const m of content.matchAll(re)) {
+      if (process.env[m[1]] === undefined) {
+        process.env[m[1]] = m[2] !== undefined ? m[2] : m[3].trim();
+      }
     }
   }
 
